@@ -13,10 +13,10 @@
 using namespace std;
 
 
-//Ïò½ÚµãĞ´ÎÄ±¾
+//å‘èŠ‚ç‚¹å†™æ–‡æœ¬
 bool saveDoc(Inode &inode, string str)
 {
-	//½«doc½Ø¶Ï³É512BµÄĞ¡¶Î
+	//å°†docæˆªæ–­æˆ512Bçš„å°æ®µ
 	vector<string> vec;
 	int ls = str.length();
 	string cut;
@@ -33,7 +33,7 @@ bool saveDoc(Inode &inode, string str)
 	else if (vec.size() >= 21 && sprblk.freeBlockNum >= vec.size() + 2 + ((int)vec.size() - 21) / indexsz + 1); 
 	else return 0;
 	int it = 0;
-	//Ğ´Ö±½Ó½Úµã
+	//å†™ç›´æ¥èŠ‚ç‚¹
 	for (it = 0; it < min(4, (int)vec.size()); it++) {
 		int bnum = getBlock();
 		if (bnum == -1) {
@@ -46,15 +46,15 @@ bool saveDoc(Inode &inode, string str)
 		for (int j = 0; j < vec[it].size(); j++) sin[j] = vec[it][j];
 		wrtBlock(inode.dirStr[it], sin);
 	}
-	//Ğ´Ò»¼¶Ë÷Òı
+	//å†™ä¸€çº§ç´¢å¼•
 	if (vec.size() > 4) {
-		//µÃµ½Ò»¸ö¿é×÷ÎªÒ»¼¶Ë÷Òı
+		//å¾—åˆ°ä¸€ä¸ªå—ä½œä¸ºä¸€çº§ç´¢å¼•
 		inode.lv1 = getBlock();
 		if (inode.lv1 == -1) return 0;
 		short lv1List[blockSz/2];
 		memset(lv1List, -1, sizeof(lv1List));
 		for (int i = 0; i < indexsz && it<vec.size(); i++, it++) {
-			//Ò»¼¶Ë÷ÒıµÄÃ¿Ò»ÏîÖ¸ÏòÒ»¸ö´æ·ÅÎÄ¼şµÄ¿é
+			//ä¸€çº§ç´¢å¼•çš„æ¯ä¸€é¡¹æŒ‡å‘ä¸€ä¸ªå­˜æ”¾æ–‡ä»¶çš„å—
 			lv1List[i] = getBlock();
 			if (lv1List[i] == -1) return 0;
 
@@ -64,7 +64,7 @@ bool saveDoc(Inode &inode, string str)
 		}
 		wrtBlock(inode.lv1, (char*)lv1List);
 	}
-	//Ğ´¶ş¼¶Ë÷Òı
+	//å†™äºŒçº§ç´¢å¼•
 	if (vec.size() > 4+indexsz) {
 		inode.lv2 = getBlock();
 		if (inode.lv2 == -1) return 0;
@@ -93,12 +93,12 @@ bool saveDoc(Inode &inode, string str)
 	return 1;
 }
 
-//Ïò½Úµã¶ÁÎÄ±¾
+//å‘èŠ‚ç‚¹è¯»æ–‡æœ¬
 string readDoc(Inode &inode)
 {
 	string res;
 	//int nextBlock = inode.dirStr[0];
-	//¶ÁÖ±½ÓµØÖ·
+	//è¯»ç›´æ¥åœ°å€
 	for (int i = 0; i < 4; i++) {
 		if (inode.dirStr[i] == -1) return res;
 		char sout[blockSz] = { 0 };
@@ -108,7 +108,7 @@ string readDoc(Inode &inode)
 			res += sout[i];
 		}
 	}
-	//¶ÁÒ»¼¶¼äÖ·
+	//è¯»ä¸€çº§é—´å€
 	short lv1List[blockSz/2] = { 0 };
 	rdBlock(inode.lv1, (char*)lv1List);
 	for (int i = 0; i < indexsz; i++) {
@@ -120,7 +120,7 @@ string readDoc(Inode &inode)
 			res += sout[i];
 		}
 	}
-	//¶Á¶ş¼¶¼äÖ·
+	//è¯»äºŒçº§é—´å€
 	short lv2List[blockSz] = { 0 };
 	rdBlock(inode.lv2, (char*)lv2List);
 	for (int i = 0; i < indexsz; i++) {
@@ -145,17 +145,17 @@ string readDoc(Inode &inode)
 	return rres;
 }
 
-//É¾³ı½ÚµãµÄÎÄ±¾
+//åˆ é™¤èŠ‚ç‚¹çš„æ–‡æœ¬
 bool delDoc(Inode &inode)
 {
 	int nextBlock = inode.dirStr[0];
-	//É¾³ıÖ±½ÓµØÖ·
+	//åˆ é™¤ç›´æ¥åœ°å€
 	for (int i = 0; i < 4; i++) {
 		if (inode.dirStr[i] == -1) return 1;
 		freeBlock(inode.dirStr[i]);
 		inode.dirStr[i] = -1;
 	}
-	//É¾³ıÒ»¼¶¼äÖ·
+	//åˆ é™¤ä¸€çº§é—´å€
 	if (inode.lv1 != -1) {
 		short lv1List[blockSz/2] = { 0 };
 		rdBlock(inode.lv1, (char*)lv1List);
@@ -167,7 +167,7 @@ bool delDoc(Inode &inode)
 		freeBlock(inode.lv1);
 		inode.lv1 = -1;
 	}
-	//É¾³ı¶ş¼¶¼äÖ·
+	//åˆ é™¤äºŒçº§é—´å€
 	if (inode.lv2 != -1) {
 		short lv2List[blockSz/2] = { 0 };
 		rdBlock(inode.lv2, (char*)lv2List);
@@ -189,7 +189,7 @@ bool delDoc(Inode &inode)
 	return 1;
 }
 
-//Ïò½Úµã¶ÁÄ¿Â¼
+//å‘èŠ‚ç‚¹è¯»ç›®å½•
 Menu readMenu(Inode inode)
 {
 	Menu menu;
@@ -209,31 +209,31 @@ string menuToString(Menu menu) {
 	return res;
 }
 
-//ĞÂ½¨ÎÄ±¾
+//æ–°å»ºæ–‡æœ¬
 int iallocDoc(CurUser curUser,string doc) {
-	//ĞÂ½¨
+	//æ–°å»º
 	int inodeId = getInode();
 	if (inodeId == -1) {
-		puts("inode½Úµã²»×ã");
+		puts("inodeèŠ‚ç‚¹ä¸è¶³");
 		return -1;
 	}
 	Inode inode(0, doc.size(), curUser);
-	//´¢´æ
+	//å‚¨å­˜
 	if (saveDoc(inode, doc)) {
 		wrtInode(inodeId, inode);
 		return inodeId;
 	}
 	else {
-		puts("ÏµÍ³¿Õ¼ä²»×ã");
+		puts("ç³»ç»Ÿç©ºé—´ä¸è¶³");
 		return -1;
 	}
 }
 
-//ĞÂ½¨Ä¿Â¼
+//æ–°å»ºç›®å½•
 int iallocMenu(int curInodeId,CurUser curUser) {
 	int inodeId = getInode();
 	if (inodeId == -1) {
-		puts("inode½Úµã²»×ã");
+		puts("inodeèŠ‚ç‚¹ä¸è¶³");
 		return -1;
 	}
 	Menu menu(inodeId, curInodeId);
@@ -243,12 +243,12 @@ int iallocMenu(int curInodeId,CurUser curUser) {
 		return inodeId;
 	}
 	else {
-		puts("ÏµÍ³¿Õ¼ä²»×ã");
+		puts("ç³»ç»Ÿç©ºé—´ä¸è¶³");
 		return -1;
 	}
 }
 
-//É¾³ıÎÄ±¾
+//åˆ é™¤æ–‡æœ¬
 bool ifreeDoc(int inodeId) {
 	Inode inode = rdInode(inodeId);
 	delDoc(inode);
@@ -256,11 +256,11 @@ bool ifreeDoc(int inodeId) {
 	return 1;
 }
 
-//É¾³ıÄ¿Â¼£¬ĞèÒª°ÑÄ¿Â¼ÏÂµÄÎÄ¼şÈ«²¿É¾³ı
+//åˆ é™¤ç›®å½•ï¼Œéœ€è¦æŠŠç›®å½•ä¸‹çš„æ–‡ä»¶å…¨éƒ¨åˆ é™¤
 bool ifreeMenu(int inodeId,CurUser curUser) {
 	Inode inode = rdInode(inodeId);
 	if (inode.type == 0) {
-		puts("¸ÃÎÄ¼ş²»ÊÇÄ¿Â¼ÎÄ¼ş£¡");
+		puts("è¯¥æ–‡ä»¶ä¸æ˜¯ç›®å½•æ–‡ä»¶ï¼");
 		return 0;
 	}
 	Menu menu = readMenu(inode);
@@ -268,9 +268,9 @@ bool ifreeMenu(int inodeId,CurUser curUser) {
 		int nid = menu.item[i].addr;
 		Inode nnode = rdInode(nid);
 		if (nnode.type == 0) {
-			//É¾³ıÄÚÈİ
+			//åˆ é™¤å†…å®¹
 			ifreeDoc(nid);
-			//ÊÍ·Å½Úµã
+			//é‡Šæ”¾èŠ‚ç‚¹
 			freeInode(nid);
 		}
 		else {
@@ -287,16 +287,16 @@ bool iappendDoc(int inodeId, string newdoc) {
 	Inode inode = rdInode(inodeId);
 	string olddoc = readDoc(inode);
 	string newone = olddoc + newdoc;
-	//1-23 ¸üĞÂÃ÷È·ÁËÊÇ³¬¹ıµ¥¸öÎÄ¼ş´óĞ¡ÏŞÖÆ »¹ÊÇ³¬¹ıÏµÍ³×Ü´óĞ¡ÏŞÖÆ
+	//1-23 æ›´æ–°æ˜ç¡®äº†æ˜¯è¶…è¿‡å•ä¸ªæ–‡ä»¶å¤§å°é™åˆ¶ è¿˜æ˜¯è¶…è¿‡ç³»ç»Ÿæ€»å¤§å°é™åˆ¶
 	if (newone.length() > (4 + indexsz + indexsz*indexsz) * 512) {
-		puts("³¬¹ıµ¥¸öÎÄ¼ş´óĞ¡ÏŞÖÆ");
+		puts("è¶…è¿‡å•ä¸ªæ–‡ä»¶å¤§å°é™åˆ¶");
 		return 0;
 	}
 
 	delDoc(inode);
 	if (!saveDoc(inode, newone)) {
 		saveDoc(inode, olddoc);
-		puts("ÏµÍ³¿Õ¼ä²»×ã");
+		puts("ç³»ç»Ÿç©ºé—´ä¸è¶³");
 	}
 	inode.docSize = newone.length();
 	wrtInode(inodeId, inode);

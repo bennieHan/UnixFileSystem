@@ -16,45 +16,45 @@
 #include<sstream>
 using namespace std;
 
-//µ±Ç°Î»ÖÃ
+//å½“å‰ä½ç½®
 int curInodeid;
 Inode curInode;
 Menu curMenu;
-//´¢´æµ±Ç°Â·¾¶
+//å‚¨å­˜å½“å‰è·¯å¾„
 vector<string> route;
-//ÓÃÓÚÎÄ¼ş¿½±´
+//ç”¨äºæ–‡ä»¶æ‹·è´
 Inode cpInode;
 string cpString;
 string cpName;
-//ËµÃ÷ÎÄ¼ş
+//è¯´æ˜æ–‡ä»¶
 string cmds[100] = {
 	"ls", "chmod", "chown", "chgrp", "cd", "mkdir", "rmdir", "umask", "mv", "cp", "pst","vi","apd","rm", "ln", "cat",
 	"passwd", "help", "exit"
 };
 string clrs[100] = {
-	"ÏÔÊ¾±¾ÎÄ¼ş¼ĞÏÂËùÓĞĞÅÏ¢ ÓÃ·¨£ºls",
-	"¸Ä±äÎÄ¼ş¶ÔËûÈËµÄÈ¨ÏŞ,Ö»ÓĞÎÄ¼şÓµÓĞ×Å»ò¹ÜÀíÔ±¿ÉÓÃ,ÓĞ¾ßÌåÌáÊ¾ ÓÃ·¨£ºchmod <ĞÂÈ¨ÏŞ±àºÅ>",
-	"¸Ä±äÎÄ¼şÓµÓĞÕß,Ö»ÓĞÎÄ¼şÓµÓĞ×Å»ò¹ÜÀíÔ±¿ÉÓÃ ÓÃ·¨£ºchown <ĞÂÓµÓĞÕßÃû³Æ>",
-	"¸Ä±äÎÄ¼şËùÊô×é,Ö»ÓĞ¹ÜÀíÔ±¿ÉÓÃ ÓÃ·¨£ºchgrp <ĞÂ×éÃû>",
-	"´ò¿ªÄ¿Â¼ÎÄ¼ş ÓÃ·¨£ºcd <µ±Ç°Ä¿Â¼ÏÂµÄÄ¿Â¼Ãû³Æ>",
-	"´´½¨ĞÂÄ¿Â¼ÎÄ¼ş ÓÃ·¨£ºmkdir <ĞÂÄ¿Â¼Ãû³Æ>",
-	"É¾³ıÄ¿Â¼ÎÄ¼ş ×¢Òâ¸ÃÄ¿Â¼ÏÂµÄËùÓĞÎÄ¼ş¶¼»á±»É¾³ı ÓÃ·¨£ºrmdir <´ıÉ¾³ıµÄÄ¿Â¼Ãû³Æ>",
-	"¸Ä±ä³õÊ¼È¨ÏŞ ÓÃ·¨£ºumask <ĞÂ³õÊ¼Ä¿Â¼È¨ÏŞ>",
-	"ÖØÃüÃûÎÄ±¾ÎÄ¼ş»òÄ¿Â¼ÎÄ¼ş ÓÃ·¨£ºmv <¾ÉÃû> <ĞÂÃû>",
-	"¸´ÖÆÎÄ±¾ÎÄ¼şµ½¼ôÌù°å ÓÃ·¨£ºcp <ÎÄ¼şÃû>",
-	"½«¼ôÌù°åÄÚµÄÎÄ¼şÕ³Ìùµ½µ±Ç°Ä¿Â¼ ÓÃ·¨£ºpst",
-	"½«Ä³¸öÖ¸¶¨³¤¶ÈµÄ×Ö·û´®¼Óµ½Ä¿±êÎÄ¼şÖ®ºó ÓÃ·¨£ºapd <Ä¿±êÎÄ¼şÃû> <×Ö·û´®³¤¶È>",
-	"´´½¨ĞÂÎÄ¼ş ÓÃ·¨£ºvi <ĞÂÎÄ¼şÃû>",
-	"É¾³ıÎÄ¼ş É¾³ıÁ¬½ÓÎÄ¼şÊ±²»É¾³ıÎÄ¼ş±¾Éí ÓÃ·¨£ºrm <ÎÄ¼şÃû>",
-	"´´½¨Á¬½Ó£¨¿ì½İ·½Ê½£©ÔÚÆğÊ¼Ä¿Â¼ÖĞ´´½¨Ò»¸öÄ¿µÄÎÄ±¾/Ä¿Â¼µÄ¿ì½İ·½Ê½ ¿ì½İ·½Ê½ÒÔ@¿ªÍ· ÓÃ·¨£ºln <Ä¿µÄÎÄ±¾»òÄ¿Â¼> <ÆğÊ¼Ä¿Â¼>",
-	"¶Á/Ğ´ÎÄ¼ş ¸ù¾İÈ¨ÏŞ¾ö¶¨ ÓÃ·¨£º cat <ÎÄ¼şÃû>",
-	"ĞŞ¸Äµ±Ç°ÓÃ»§µÄÃÜÂë ÓÃ·¨£ºpasswd <ĞÂÃÜÂë>",
-	"»ñµÃ°ïÖú ÓÃ·¨ help <all>|<Ö¸ÁîÃû>",
-	"°²È«ÍË³ö ÓÃ·¨ exit"
+	"æ˜¾ç¤ºæœ¬æ–‡ä»¶å¤¹ä¸‹æ‰€æœ‰ä¿¡æ¯ ç”¨æ³•ï¼šls",
+	"æ”¹å˜æ–‡ä»¶å¯¹ä»–äººçš„æƒé™,åªæœ‰æ–‡ä»¶æ‹¥æœ‰ç€æˆ–ç®¡ç†å‘˜å¯ç”¨,æœ‰å…·ä½“æç¤º ç”¨æ³•ï¼šchmod <æ–°æƒé™ç¼–å·>",
+	"æ”¹å˜æ–‡ä»¶æ‹¥æœ‰è€…,åªæœ‰æ–‡ä»¶æ‹¥æœ‰ç€æˆ–ç®¡ç†å‘˜å¯ç”¨ ç”¨æ³•ï¼šchown <æ–°æ‹¥æœ‰è€…åç§°>",
+	"æ”¹å˜æ–‡ä»¶æ‰€å±ç»„,åªæœ‰ç®¡ç†å‘˜å¯ç”¨ ç”¨æ³•ï¼šchgrp <æ–°ç»„å>",
+	"æ‰“å¼€ç›®å½•æ–‡ä»¶ ç”¨æ³•ï¼šcd <å½“å‰ç›®å½•ä¸‹çš„ç›®å½•åç§°>",
+	"åˆ›å»ºæ–°ç›®å½•æ–‡ä»¶ ç”¨æ³•ï¼šmkdir <æ–°ç›®å½•åç§°>",
+	"åˆ é™¤ç›®å½•æ–‡ä»¶ æ³¨æ„è¯¥ç›®å½•ä¸‹çš„æ‰€æœ‰æ–‡ä»¶éƒ½ä¼šè¢«åˆ é™¤ ç”¨æ³•ï¼šrmdir <å¾…åˆ é™¤çš„ç›®å½•åç§°>",
+	"æ”¹å˜åˆå§‹æƒé™ ç”¨æ³•ï¼šumask <æ–°åˆå§‹ç›®å½•æƒé™>",
+	"é‡å‘½åæ–‡æœ¬æ–‡ä»¶æˆ–ç›®å½•æ–‡ä»¶ ç”¨æ³•ï¼šmv <æ—§å> <æ–°å>",
+	"å¤åˆ¶æ–‡æœ¬æ–‡ä»¶åˆ°å‰ªè´´æ¿ ç”¨æ³•ï¼šcp <æ–‡ä»¶å>",
+	"å°†å‰ªè´´æ¿å†…çš„æ–‡ä»¶ç²˜è´´åˆ°å½“å‰ç›®å½• ç”¨æ³•ï¼špst",
+	"å°†æŸä¸ªæŒ‡å®šé•¿åº¦çš„å­—ç¬¦ä¸²åŠ åˆ°ç›®æ ‡æ–‡ä»¶ä¹‹å ç”¨æ³•ï¼šapd <ç›®æ ‡æ–‡ä»¶å> <å­—ç¬¦ä¸²é•¿åº¦>",
+	"åˆ›å»ºæ–°æ–‡ä»¶ ç”¨æ³•ï¼švi <æ–°æ–‡ä»¶å>",
+	"åˆ é™¤æ–‡ä»¶ åˆ é™¤è¿æ¥æ–‡ä»¶æ—¶ä¸åˆ é™¤æ–‡ä»¶æœ¬èº« ç”¨æ³•ï¼šrm <æ–‡ä»¶å>",
+	"åˆ›å»ºè¿æ¥ï¼ˆå¿«æ·æ–¹å¼ï¼‰åœ¨èµ·å§‹ç›®å½•ä¸­åˆ›å»ºä¸€ä¸ªç›®çš„æ–‡æœ¬/ç›®å½•çš„å¿«æ·æ–¹å¼ å¿«æ·æ–¹å¼ä»¥@å¼€å¤´ ç”¨æ³•ï¼šln <ç›®çš„æ–‡æœ¬æˆ–ç›®å½•> <èµ·å§‹ç›®å½•>",
+	"è¯»/å†™æ–‡ä»¶ æ ¹æ®æƒé™å†³å®š ç”¨æ³•ï¼š cat <æ–‡ä»¶å>",
+	"ä¿®æ”¹å½“å‰ç”¨æˆ·çš„å¯†ç  ç”¨æ³•ï¼špasswd <æ–°å¯†ç >",
+	"è·å¾—å¸®åŠ© ç”¨æ³• help <all>|<æŒ‡ä»¤å>",
+	"å®‰å…¨é€€å‡º ç”¨æ³• exit"
 };
 
 //
-//ÅĞ¶Ïµ±Ç°ÓÃ»§¶Ô¸ÃÎÄ¼şµÄÈ¨ÏŞ
+//åˆ¤æ–­å½“å‰ç”¨æˆ·å¯¹è¯¥æ–‡ä»¶çš„æƒé™
 int isowner(CurUser curUser, Inode inode) {
 	if (curUser.username == "admin") return 3;
 	if (curUser.username == inode.onwer){
@@ -81,7 +81,7 @@ void input(char s[]) {
 	string in;
 	cin >> in;
 	if (in.length() > stdls-1) {
-		printf("¹ı³¤×Ö·û´®ÊäÈë×Ô¶¯½Ø¶Ï\n");
+		printf("è¿‡é•¿å­—ç¬¦ä¸²è¾“å…¥è‡ªåŠ¨æˆªæ–­\n");
 		for (int i = 0; i < stdls-1; i++) s[i] = in[i];
 		s[stdls-1] = 0;
 	}
@@ -105,7 +105,7 @@ void inputPassword(char s[]) {
 		}
 	}
 	if (in.length() > stdls-1) {
-		printf("¹ı³¤×Ö·û´®ÊäÈë×Ô¶¯½Ø¶Ï\n");
+		printf("è¿‡é•¿å­—ç¬¦ä¸²è¾“å…¥è‡ªåŠ¨æˆªæ–­\n");
 		for (int i = 0; i < stdls-1; i++) s[i] = in[i];
 		s[stdls-1] = 0;
 	}
@@ -126,9 +126,9 @@ void printRoute() {
 }
 
 void logicInit() {
-	//³õÊ¼»¯
+	//åˆå§‹åŒ–
 	while (1) {
-		printf("ÖØÖÃÏµÍ³ = 0 ¼ÌĞø¿ªÊ¼ = 1\n");
+		printf("é‡ç½®ç³»ç»Ÿ = 0 ç»§ç»­å¼€å§‹ = 1\n");
 		int fg; scanf("%d", &fg);
 		if (fg == 0) {
 			fresh();
@@ -138,7 +138,7 @@ void logicInit() {
 		else {
 			Sprblk tmpSprblk = rdSpblk();
 			if (tmpSprblk.blockTot != totBlock) {
-				printf("ÏµÍ³»¹Î´³õÊ¼»¯£¡ÇëÑ¡ÔñÖØÖÃÏµÍ³\n");
+				printf("ç³»ç»Ÿè¿˜æœªåˆå§‹åŒ–ï¼è¯·é€‰æ‹©é‡ç½®ç³»ç»Ÿ\n");
 				system("pause");
 				system("cls");
 			}
@@ -152,20 +152,20 @@ void logicInit() {
 }
 
 void login_register(){
-	//µÇÂ½/×¢²á
+	//ç™»é™†/æ³¨å†Œ
 	while (1) {
-		printf("µÇÂ½ = 0 ×¢²á = 1\n");
+		printf("ç™»é™† = 0 æ³¨å†Œ = 1\n");
 		int fg; scanf("%d", &fg);
 		if (fg == 0) {
 			char username[stdls], password[stdls];
-			printf("ÇëÊäÈëÓÃ»§Ãû£º\n");
+			printf("è¯·è¾“å…¥ç”¨æˆ·åï¼š\n");
 			input(username);
-			printf("ÇëÊäÈëÃÜÂë£º\n");
+			printf("è¯·è¾“å…¥å¯†ç ï¼š\n");
 			inputPassword(password);
 			bool loginSuccess = 0;
 			for (int i = 0; i < 5; i++) {
 				if (strcmp(sprblk.username[i], username) == 0 && strcmp(sprblk.password[i], password) == 0) {
-					puts("µÇÂ½³É¹¦£¡");
+					puts("ç™»é™†æˆåŠŸï¼");
 					curUser.username = username;
 					if (curUser.username == "admin") curUser.group = "admin";
 					else curUser.group = "user";
@@ -175,16 +175,16 @@ void login_register(){
 			}
 			if (loginSuccess) break;
 			else {
-				puts("µÇÂ½Ê§°Ü£¡");
+				puts("ç™»é™†å¤±è´¥ï¼");
 			}
 		}
 		else {
 			char username[stdls], password[stdls], repassword[stdls];
-			printf("ÇëÊäÈëÓÃ»§Ãû£º\n");
+			printf("è¯·è¾“å…¥ç”¨æˆ·åï¼š\n");
 			input(username);
-			printf("ÇëÊäÈëÃÜÂë£º\n");
+			printf("è¯·è¾“å…¥å¯†ç ï¼š\n");
 			inputPassword(password);
-			printf("ÇëÖØ¸´ÊäÈëÃÜÂë\n");
+			printf("è¯·é‡å¤è¾“å…¥å¯†ç \n");
 			inputPassword(repassword);
 			bool registerSuccess = 0;
 			for (int i = 0; i < 5; i++) {
@@ -196,18 +196,18 @@ void login_register(){
 						curUser.username = username;
 						if (curUser.username == "admin") curUser.group = "admin";
 						else curUser.group = "user";
-						printf("×¢²á³É¹¦£¡\n");
+						printf("æ³¨å†ŒæˆåŠŸï¼\n");
 						break;
 					}
 					else {
-						puts("Á½´ÎÃÜÂë²»Ò»ÖÂ");
+						puts("ä¸¤æ¬¡å¯†ç ä¸ä¸€è‡´");
 						break;
 					}
 				}
 			}
 			if (registerSuccess) break;
 			else {
-				printf("×¢²áÊ§°Ü£¡\n");
+				printf("æ³¨å†Œå¤±è´¥ï¼\n");
 			}
 		}
 	}
@@ -274,36 +274,36 @@ int main() {
 			printRoute();
 			puts("");
 		}
-		//´´½¨ĞÂÎÄ¼ş ÎŞĞèÈ¨ÏŞ
+		//åˆ›å»ºæ–°æ–‡ä»¶ æ— éœ€æƒé™
 		if (cmd == "vi") {
 			char fname[stdls];
 			input(fname);
 			if (serMenu(fname)!=-1) {
-				puts("¸ÃÎÄ¼şÃûÒÑ´æÔÚ");
+				puts("è¯¥æ–‡ä»¶åå·²å­˜åœ¨");
 				continue;
 			}
-			//ÎªĞÂÎÄ¼ş·ÖÅä´¢´æ¿Õ¼ä
-			//ÊäÈëÎÄ±¾
+			//ä¸ºæ–°æ–‡ä»¶åˆ†é…å‚¨å­˜ç©ºé—´
+			//è¾“å…¥æ–‡æœ¬
 			string doc;
-			puts("Äã¿ÉÒÔÔÚ´óĞ¡Ğ´×ÖÄ¸Ğ´Èë¼°Êı×Ö ·Ç·¨ÊäÈëÊÓÎªÊäÈë½áÊø");
+			puts("ä½ å¯ä»¥åœ¨å¤§å°å†™å­—æ¯å†™å…¥åŠæ•°å­— éæ³•è¾“å…¥è§†ä¸ºè¾“å…¥ç»“æŸ");
 			getchar();
 			while (char ch = getchar()) {
 				if (!(ch >= 'a' && ch <= 'z' || ch >= 'A'&& ch <= 'Z' || ch >= '0' && ch <= '9')) break;
 				doc += ch;
 			}
 			int fid = iallocDoc(curUser,doc);
-			//¸üĞÂÄ¿Â¼
+			//æ›´æ–°ç›®å½•
 			iaddMenu(curInodeid, Item(fname,fid));
-			//¸üĞÂµ±Ç°Ä¿Â¼
+			//æ›´æ–°å½“å‰ç›®å½•
 			curInode = rdInode(curInodeid);
 			curMenu = readMenu(curInode);
 		}
-		//´´½¨ÎÄ¼ş¼Ğ ÎŞĞèÈ¨ÏŞ
+		//åˆ›å»ºæ–‡ä»¶å¤¹ æ— éœ€æƒé™
 		if (cmd == "mkdir") {
 			char mnname[stdls];
 			input(mnname);
 			if (serMenu(mnname)!=-1) {
-				puts("¸ÃÎÄ¼şÃûÒÑ´æÔÚ");
+				puts("è¯¥æ–‡ä»¶åå·²å­˜åœ¨");
 				continue;
 			}
 			int mnid = iallocMenu(curInodeid, curUser);
@@ -311,27 +311,27 @@ int main() {
 			curInode = rdInode(curInodeid);
 			curMenu = readMenu(curInode);
 		}
-		//É¾³ıÎÄ¼ş¼Ğ ĞèÒªÉ¾³ıÈ¨ÏŞ2
+		//åˆ é™¤æ–‡ä»¶å¤¹ éœ€è¦åˆ é™¤æƒé™2
 		if (cmd == "rmdir") {
 			char mnname[stdls];
 			input(mnname);
 			int toDel = serMenu(mnname);
 			Inode toDelNode = rdInode(toDel);
 			if (toDel == -1) {
-				puts("ÕÒ²»µ½ÎÄ¼ş¼Ğ");
+				puts("æ‰¾ä¸åˆ°æ–‡ä»¶å¤¹");
 				continue;
 			}
 			if (!noLink(toDel,toDel)) {
-				puts("¸ÃÎÄ¼ş¼ĞÖĞÓĞ±»Á´½ÓµÄÎÄ¼ş");
+				puts("è¯¥æ–‡ä»¶å¤¹ä¸­æœ‰è¢«é“¾æ¥çš„æ–‡ä»¶");
 				continue;
 			}
 			if (isowner(curUser, toDelNode) < 2) {
-				puts("È¨ÏŞ²»×ã");
+				puts("æƒé™ä¸è¶³");
 				continue;
 			}
 			if (mnname[0] != '@') {
 				if (toDelNode.linkedMenu) {
-					puts("ÇëÏÈÉ¾³ıÁ¬½ÓÏò¸ÃÎÄ¼şµÄÁ¬½Ó");
+					puts("è¯·å…ˆåˆ é™¤è¿æ¥å‘è¯¥æ–‡ä»¶çš„è¿æ¥");
 					continue;
 				}
 				if (ifreeMenu(toDel, curUser)) {
@@ -349,13 +349,13 @@ int main() {
 			}
 			
 		}
-		//ÒÆ¶¯µ½ÎÄ¼ş¼Ğ ĞèÒª¶ÁÈ¨ÏŞ0
+		//ç§»åŠ¨åˆ°æ–‡ä»¶å¤¹ éœ€è¦è¯»æƒé™0
 		if (cmd == "cd") {
 			char to[12];
 			input(to);
 			if (strlen(to) == 2 && to[0] == '.' && to[1] == '.') {
 				if (curInodeid == sprblk.root) {
-					printf("µ±Ç°ÔÚ¸ù½Úµã\n");
+					printf("å½“å‰åœ¨æ ¹èŠ‚ç‚¹\n");
 					continue;
 				}
 				route.pop_back();
@@ -368,16 +368,16 @@ int main() {
 			else {
 				int toMove = serMenu(to);
 				if (toMove == -1) {
-					puts("ÕÒ²»µ½ÎÄ¼ş¼Ğ");
+					puts("æ‰¾ä¸åˆ°æ–‡ä»¶å¤¹");
 					continue;
 				}
 				Inode nextInode = rdInode(toMove);
 				if (nextInode.type == 0) {
-					puts("Õâ²»ÊÇÒ»¸öÄ¿Â¼ÎÄ¼ş");
+					puts("è¿™ä¸æ˜¯ä¸€ä¸ªç›®å½•æ–‡ä»¶");
 					continue;
 				}
 				if (isowner(curUser, nextInode) < 0) {
-					puts("È¨ÏŞ²»×ã£¡");
+					puts("æƒé™ä¸è¶³ï¼");
 					continue;
 				}
 				
@@ -416,7 +416,7 @@ int main() {
 				}
 			}
 		}
-		//ÏÔÊ¾Ä¿Â¼ÏÂÎÄ¼ş ÎŞĞèÈ¨ÏŞ
+		//æ˜¾ç¤ºç›®å½•ä¸‹æ–‡ä»¶ æ— éœ€æƒé™
 		if (cmd == "ls") {
 			changeReadTime(curInodeid);
 			string chs; cin >> chs;
@@ -450,32 +450,32 @@ int main() {
 					Inode tmp = rdInode(curMenu.item[i].addr);
 					if (isowner(curUser, tmp) > -1) {
 						cout << setw(stdls) << curMenu.item[i].name << " ";
-						if (tmp.type == 0 && i >= 2) puts("ÎÄ¼ş");
-						else puts("Ä¿Â¼");
+						if (tmp.type == 0 && i >= 2) puts("æ–‡ä»¶");
+						else puts("ç›®å½•");
 					}
 				}
 			}
 			puts("-------------------END-------------------");
 		}
-		//¶Á/Ğ´ÎÄ¼ş ĞèÒªÈ¨ÏŞ0/1
+		//è¯»/å†™æ–‡ä»¶ éœ€è¦æƒé™0/1
 		if (cmd == "cat") {
 			char to[stdls];
 			input(to);
 			bool catok = 0;
 			int toCat = serMenu(to);
 			if (toCat == -1) {
-				 puts("ÎÄ¼şÃûÊäÈë´íÎó");
+				 puts("æ–‡ä»¶åè¾“å…¥é”™è¯¯");
 				 continue;
 			}
 
 			Inode nextInode = rdInode(toCat);
 			if (nextInode.type == 1) {
-				puts("Õâ²»ÊÇÒ»¸öÎÄ±¾ÎÄ¼ş");
+				puts("è¿™ä¸æ˜¯ä¸€ä¸ªæ–‡æœ¬æ–‡ä»¶");
 				continue;
 			}
 			int rt;
 			if ((rt = isowner(curUser, nextInode)) < 0) {
-				puts("È¨ÏŞ²»×ã£¡");		
+				puts("æƒé™ä¸è¶³ï¼");		
 				continue;
 			}
 			string old = readDoc(nextInode);
@@ -483,13 +483,13 @@ int main() {
 			changeReadTime(toCat);
 
 			if (rt == 0) {
-				puts("µ±Ç°È¨ÏŞÖ»ÄÜ¶ÁÎÄ¼ş£º");
+				puts("å½“å‰æƒé™åªèƒ½è¯»æ–‡ä»¶ï¼š");
 				cout << old << endl;
 				system("pause");
 				catok = 1;
 			}
 			else {
-				puts("Äã¿ÉÒÔÔÚÔ­ÎÄ¼şĞø½Ó´óĞ¡Ğ´×ÖÄ¸¼°Êı×Ö ·Ç·¨ÊäÈëÊÓÎªÊäÈë½áÊø");
+				puts("ä½ å¯ä»¥åœ¨åŸæ–‡ä»¶ç»­æ¥å¤§å°å†™å­—æ¯åŠæ•°å­— éæ³•è¾“å…¥è§†ä¸ºè¾“å…¥ç»“æŸ");
 				cout << old;
 				getchar();
 				while (char ch = getchar()) {
@@ -505,24 +505,24 @@ int main() {
 			input(to);
 			int roShow = serMenu(to);
 			if (roShow == -1) {
-				puts("ÎÄ¼ş²»´æÔÚ");
+				puts("æ–‡ä»¶ä¸å­˜åœ¨");
 				continue;
 			}
 			Inode nextInode = rdInode(roShow);
-			printf("ÀàĞÍ£º");
-			if (nextInode.type == 0) puts("ÎÄ±¾ÎÄ¼ş");
-			else puts("Ä¿Â¼ÎÄ¼ş");
+			printf("ç±»å‹ï¼š");
+			if (nextInode.type == 0) puts("æ–‡æœ¬æ–‡ä»¶");
+			else puts("ç›®å½•æ–‡ä»¶");
 
-			printf("ÓµÓĞÕß£º%s\n", nextInode.onwer);
-			printf("ËùÊô×é£º%s\n", nextInode.group);
+			printf("æ‹¥æœ‰è€…ï¼š%s\n", nextInode.onwer);
+			printf("æ‰€å±ç»„ï¼š%s\n", nextInode.group);
 			char lastReadTime[64],lastWriteTime[64];
 			strftime(lastReadTime, sizeof(lastReadTime), "%Y-%m-%d %H:%M:%S", localtime(&nextInode.lastRead));
-			printf("×îºó·ÃÎÊÊ±¼ä£º%s\n", lastReadTime);
+			printf("æœ€åè®¿é—®æ—¶é—´ï¼š%s\n", lastReadTime);
 			strftime(lastWriteTime, sizeof(lastWriteTime), "%Y-%m-%d %H:%M:%S", localtime(&nextInode.lastWrite));
-			printf("×îºóĞŞ¸ÄÊ±¼ä£º%s\n", lastWriteTime);
+			printf("æœ€åä¿®æ”¹æ—¶é—´ï¼š%s\n", lastWriteTime);
 			changeReadTime(roShow);
 		}
-		//¸Ä±äÎÄ¼şÈ¨ÏŞ ĞèÒª×î¸ßÈ¨ÏŞ3
+		//æ”¹å˜æ–‡ä»¶æƒé™ éœ€è¦æœ€é«˜æƒé™3
 		if (cmd == "chmod") {
 			char to[stdls] = { 0 };
 			input(to);
@@ -531,7 +531,7 @@ int main() {
 
 			int toChmod = serMenu(to);
 			if (toChmod == -1) {
-				puts("ÎÄ¼ş²»´æÔÚ");
+				puts("æ–‡ä»¶ä¸å­˜åœ¨");
 				continue;
 			}
 			Inode nextInode = rdInode(toChmod);
@@ -549,21 +549,21 @@ int main() {
 				nextInode.visMod[2][1] = (oth >> 1) & 1;
 				nextInode.visMod[2][2] = (oth)& 1;
 				wrtInode(toChmod, nextInode);
-				puts("È¨ÏŞĞŞ¸Ä³É¹¦");
+				puts("æƒé™ä¿®æ”¹æˆåŠŸ");
 				changeWriteTime(toChmod);
 			}
 			else {
-				puts("È¨ÏŞ²»×ã");
+				puts("æƒé™ä¸è¶³");
 			}
 		}
 
-		//¸Ä±äÎÄ¼şÓµÓĞÕß
+		//æ”¹å˜æ–‡ä»¶æ‹¥æœ‰è€…
 		if (cmd == "chown") {
 			char to[stdls] = { 0 };
 			input(to);
 			char newUsername[stdls];
 			while (1) {
-				puts("ĞŞ¸Ä¸ÃÎÄ¼şÓµÓĞÕß ÊäÈëĞÂÓµÓĞÕßÓÃ»§Ãû£º");
+				puts("ä¿®æ”¹è¯¥æ–‡ä»¶æ‹¥æœ‰è€… è¾“å…¥æ–°æ‹¥æœ‰è€…ç”¨æˆ·åï¼š");
 				input(newUsername);
 				int fg = 0;
 				for (int i = 0; i < 5; i++) {
@@ -571,52 +571,52 @@ int main() {
 						fg = 1;
 					}
 				}
-				if (!fg) puts("¸ÃÓÃ»§²»´æÔÚ");
+				if (!fg) puts("è¯¥ç”¨æˆ·ä¸å­˜åœ¨");
 				else break;
 			}
 			int toChown = serMenu(to);
 			if (toChown == -1) {
-				puts("ÎÄ¼ş²»´æÔÚ");
+				puts("æ–‡ä»¶ä¸å­˜åœ¨");
 				continue;
 			}
 			Inode nextInode = rdInode(toChown);
 			if (isowner(curUser, nextInode) == 3) {
 				strcpy(nextInode.onwer, newUsername);
 				wrtInode(toChown, nextInode);
-				puts("ÓµÓĞÕßĞŞ¸Ä³É¹¦");
+				puts("æ‹¥æœ‰è€…ä¿®æ”¹æˆåŠŸ");
 				changeWriteTime(toChown);
 			}
 			else {
-				puts("È¨ÏŞ²»×ã");
+				puts("æƒé™ä¸è¶³");
 			}
 		}
 
-		//¸Ä±äÎÄ¼şËùÊô×é
+		//æ”¹å˜æ–‡ä»¶æ‰€å±ç»„
 		if (cmd == "chgrp") {
 			char to[stdls] = { 0 };
 			input(to);
 			char newgroup[stdls];
 			while (1) {
-				puts("ĞŞ¸Ä¸ÃÎÄ¼şËùÊô×é ÊäÈëĞÂËùÊô×é×éÃû£º");
+				puts("ä¿®æ”¹è¯¥æ–‡ä»¶æ‰€å±ç»„ è¾“å…¥æ–°æ‰€å±ç»„ç»„åï¼š");
 				input(newgroup);
 				if (strcmp(newgroup, "user") == 0) break;
 				if (strcmp(newgroup, "admin") == 0) break;
-				puts("¸Ã×é²»´æÔÚ");
+				puts("è¯¥ç»„ä¸å­˜åœ¨");
 			}
 			int toChgrp = serMenu(to);
 			if (toChgrp == -1) {
-				puts("ÎÄ¼ş²»´æÔÚ"); 
+				puts("æ–‡ä»¶ä¸å­˜åœ¨"); 
 				continue;
 			}
 			Inode nextInode = rdInode(toChgrp);
 			if (isowner(curUser, nextInode) == 3) {
 				strcpy(nextInode.group, newgroup);
 				wrtInode(toChgrp, nextInode);
-				puts("ËùÊô×éĞŞ¸Ä³É¹¦");
+				puts("æ‰€å±ç»„ä¿®æ”¹æˆåŠŸ");
 				changeWriteTime(toChgrp);
 			}
 			else {
-				puts("È¨ÏŞ²»×ã");
+				puts("æƒé™ä¸è¶³");
 			}
 		}
 
@@ -625,7 +625,7 @@ int main() {
 			input(to);
 			char newname[stdls];
 			while (1) {
-				puts("ĞŞ¸Ä¸ÃÎÄ¼şÎÄ¼şÃû ÊäÈëĞÂÎÄ¼şÃû£º");
+				puts("ä¿®æ”¹è¯¥æ–‡ä»¶æ–‡ä»¶å è¾“å…¥æ–°æ–‡ä»¶åï¼š");
 				input(newname);
 				int fg = 0;
 				for (int i = 0; i<curMenu.it; i++) {
@@ -633,7 +633,7 @@ int main() {
 						fg = 1;
 					}
 				}
-				if (fg) puts("¸ÃÓÃ»§ÃûÒÑ´æÔÚ");
+				if (fg) puts("è¯¥ç”¨æˆ·åå·²å­˜åœ¨");
 				else break;
 			}
 			int ok = 0;
@@ -644,44 +644,44 @@ int main() {
 						idelMenu(curInodeid, Item(curMenu.item[i].name, curMenu.item[i].addr));
 						strcpy(curMenu.item[i].name, newname);
 						iaddMenu(curInodeid, Item(curMenu.item[i].name, curMenu.item[i].addr));
-						puts("ÎÄ¼şÃûĞŞ¸Ä³É¹¦");
+						puts("æ–‡ä»¶åä¿®æ”¹æˆåŠŸ");
 						changeWriteTime(curMenu.item[i].addr);
 					}
 					else {
-						puts("È¨ÏŞ²»×ã");
+						puts("æƒé™ä¸è¶³");
 					}
 					ok = 1;
 				}
 			}
-			if (!ok) puts("ÕÒ²»µ½ÎÄ¼ş");
+			if (!ok) puts("æ‰¾ä¸åˆ°æ–‡ä»¶");
 		}
 		if (cmd == "cp") {
 			char origin[stdls];
 			input(origin);
 			int originInode = serMenu(origin);
 			if (originInode == -1) {
-				puts("ÕÒ²»µ½ÎÄ¼ş");
+				puts("æ‰¾ä¸åˆ°æ–‡ä»¶");
 				continue;
 			}
 
 			cpInode = rdInode(originInode);
 			if (cpInode.type == 1) {
-				puts("²»Ö§³Ö¸´ÖÆÎÄ¼ş¼Ğ");
+				puts("ä¸æ”¯æŒå¤åˆ¶æ–‡ä»¶å¤¹");
 				continue;
 			}
 			if (isowner(curUser, cpInode) < 2) {
-				puts("È¨ÏŞ²»×ã");
+				puts("æƒé™ä¸è¶³");
 				continue;
 			}
 
 			cpString = readDoc(cpInode);
 			cpName = origin;
-			puts("ÒÑ¸´ÖÆ");
+			puts("å·²å¤åˆ¶");
 			changeWriteTime(originInode);
 		}
 		if (cmd == "pst") {
 			if (cpName.length() == 0) {
-				puts("¼ôÌù°åÎª¿Õ");
+				puts("å‰ªè´´æ¿ä¸ºç©º");
 				continue;
 			}
 			char cpname[stdls];
@@ -698,15 +698,15 @@ int main() {
 				ck = serMenu(cpname);;
 			}
 			if (l == stdls-1) {
-				puts("ÎÄ¼şÃû¹ı³¤");
+				puts("æ–‡ä»¶åè¿‡é•¿");
 				continue;
 			}
 			cpname[l] = 0;
 			
 			int newInodeId = iallocDoc(curUser,cpString);
-			//¸üĞÂÄ¿Â¼
+			//æ›´æ–°ç›®å½•
 			iaddMenu(curInodeid, Item(cpname, newInodeId));
-			//¸üĞÂµ±Ç°Ä¿Â¼
+			//æ›´æ–°å½“å‰ç›®å½•
 			curInode = rdInode(curInodeid);
 			curMenu = readMenu(curInode);
 		}
@@ -716,10 +716,10 @@ int main() {
 			int lf = strlen(from);
 			int lt = strlen(to);
 			if (curUser.group != "admin") {
-				puts("¹ÜÀíÔ±×é²Å¿ÉÖ´ĞĞ±¾²Ù×÷");
+				puts("ç®¡ç†å‘˜ç»„æ‰å¯æ‰§è¡Œæœ¬æ“ä½œ");
 				continue;
 			}
-			//·Ö½âÂ·¾¶
+			//åˆ†è§£è·¯å¾„
 			vector<string>route1;
 			vector<string>route2;
 			string res;
@@ -738,7 +738,7 @@ int main() {
 				}
 				else res += to[i];
 			}route2.push_back(res);
-			//»ñÈ¡rt1µÄinode½Úµã
+			//è·å–rt1çš„inodeèŠ‚ç‚¹
 			int nodeid = sprblk.root;
 			int fg = 0;
 			for (int i = 1; i < route1.size(); i++) {
@@ -752,13 +752,13 @@ int main() {
 					}
 				}
 				if (!fg) {
-					puts("ÕÒ²»µ½¶ÔÓ¦ÎÄ¼ş");
+					puts("æ‰¾ä¸åˆ°å¯¹åº”æ–‡ä»¶");
 					break;
 				}
 			}
 			if (!fg && route1.size()>1) continue;
 			fg = 0;
-			//»ñÈ¡rt2µÄÎ»ÖÃ
+			//è·å–rt2çš„ä½ç½®
 			int des = sprblk.root;
 			for (int i = 1; i < route2.size(); i++) {
 				Inode inode = rdInode(des);
@@ -772,7 +772,7 @@ int main() {
 					}
 				}
 				if (!fg) {
-					puts("ÕÒ²»µ½¶ÔÓ¦ÎÄ¼ş");
+					puts("æ‰¾ä¸åˆ°å¯¹åº”æ–‡ä»¶");
 					break;
 				}
 			}
@@ -780,14 +780,14 @@ int main() {
 
 			Inode inode = rdInode(des);
 			if (inode.type == 0) {
-				puts("ÎÄ±¾ÎÄ¼ş²»ÄÜ×÷ÎªÁ¬½ÓÆğµã");
+				puts("æ–‡æœ¬æ–‡ä»¶ä¸èƒ½ä½œä¸ºè¿æ¥èµ·ç‚¹");
 				continue;
 			}
 
 			char name[stdls];
 			Menu cmenu = readMenu(inode);
 			if ((int)route1[route1.size() - 1].length() >= 10) {
-				puts("ÎÄ¼şÃû¹ı³¤ ´´½¨Á¬½ÓÊ§°Ü");
+				puts("æ–‡ä»¶åè¿‡é•¿ åˆ›å»ºè¿æ¥å¤±è´¥");
 				continue;
 			}
 			name[0] = '@';
@@ -819,20 +819,20 @@ int main() {
 			stringstream ss(tmpsz);
 			int sz; ss >> sz;
 			if (sz < 0) {
-				puts("·Ç·¨ÎÄ¼ş³¤¶È");
+				puts("éæ³•æ–‡ä»¶é•¿åº¦");
 				continue;
 			}
 			if (toApd == -1) {
-				puts("ÕÒ²»µ½ÎÄ¼ş");
+				puts("æ‰¾ä¸åˆ°æ–‡ä»¶");
 				continue;
 			}
 			Inode inode = rdInode(toApd);
 			if (isowner(curUser, inode) < 1) {
-				puts("È¨ÏŞ²»×ã");
+				puts("æƒé™ä¸è¶³");
 				continue;
 			}
 			if (inode.type != 0) {
-				puts("²»ÊÇÎÄ±¾ÎÄ¼ş");
+				puts("ä¸æ˜¯æ–‡æœ¬æ–‡ä»¶");
 				continue;
 			}
 			changeReadTime(toApd);
@@ -846,23 +846,23 @@ int main() {
 			input(to);
 			int toRmove = serMenu(to);
 			if (toRmove == -1) {
-				puts("ÕÒ²»µ½ÎÄ¼ş");
+				puts("æ‰¾ä¸åˆ°æ–‡ä»¶");
 				continue;
 			}
 			Inode inode = rdInode(toRmove);
 			if (isowner(curUser, inode) < 2) {
-				puts("È¨ÏŞ²»×ã");
+				puts("æƒé™ä¸è¶³");
 				continue;
 			}
 
 			if (inode.type != 0) {
-				puts("²»ÊÇÎÄ±¾ÎÄ¼ş£¬ÇëÊ¹ÓÃrmdirÃüÁîÉ¾³ıÎÄ¼ş¼Ğ");
+				puts("ä¸æ˜¯æ–‡æœ¬æ–‡ä»¶ï¼Œè¯·ä½¿ç”¨rmdirå‘½ä»¤åˆ é™¤æ–‡ä»¶å¤¹");
 				continue;
 			}
 			
 			if (to[0] != '@') {
 				if (inode.linkedMenu) {
-					puts("ÇëÏÈÉ¾³ıÁ¬½ÓÏò¸ÃÎÄ¼şµÄÁ¬½Ó");
+					puts("è¯·å…ˆåˆ é™¤è¿æ¥å‘è¯¥æ–‡ä»¶çš„è¿æ¥");
 					continue;
 				}
 				ifreeDoc(toRmove);
@@ -905,7 +905,7 @@ int main() {
 			int newUmask;
 			cin >> newUmask;
 			if (curUser.group != "admin") {
-				puts("±ØĞëÊÇ¹ÜÀíÔ±È¨ÏŞ");
+				puts("å¿…é¡»æ˜¯ç®¡ç†å‘˜æƒé™");
 				continue;
 			}
 			if (newUmask >= 0 && newUmask <= 777) {
@@ -923,7 +923,7 @@ int main() {
 				sprblk.umask[2][2] = (oth)& 1;
 			}
 			else {
-				puts("ĞÂÄ¬ÈÏÈ¨ÏŞ·Ç·¨");
+				puts("æ–°é»˜è®¤æƒé™éæ³•");
 			}
 		}
 		if (cmd == "exit") {

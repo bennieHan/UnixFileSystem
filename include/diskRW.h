@@ -8,7 +8,7 @@
 #include"menu.h"
 using namespace std;
 
-//Ğ´³¬¼¶¿é
+//å†™è¶…çº§å—
 bool wrtSpblk(Sprblk sprblk) {
 	fstream iofile("#C.disk", ios::in | ios::out | ios::binary);
 	iofile.seekg(ios::beg);
@@ -17,7 +17,7 @@ bool wrtSpblk(Sprblk sprblk) {
 	return 1;
 }
 
-//¶Á³¬¼¶¿é
+//è¯»è¶…çº§å—
 Sprblk rdSpblk() {
 	Sprblk res;
 	fstream iofile("#C.disk", ios::in | ios::out | ios::binary);
@@ -27,10 +27,10 @@ Sprblk rdSpblk() {
 	return res;
 }
 
-//Ğ´Inode½Úµã
+//å†™InodeèŠ‚ç‚¹
 bool wrtInode(int inodeid, Inode cur) {
 	fstream iofile("#C.disk", ios::in | ios::out | ios::binary);
-	//³¬¼¶¿é+¿éºÅ+i½ÚµãºÅ
+	//è¶…çº§å—+å—å·+ièŠ‚ç‚¹å·
 	int poi = blockSz + inodeid *inodesz;
 	iofile.seekg(ios::beg + poi);
 	iofile.write((char*)&cur, sizeof(Inode));
@@ -38,10 +38,10 @@ bool wrtInode(int inodeid, Inode cur) {
 	return 1;
 }
 
-//¶ş½øÖÆĞ´Inode
+//äºŒè¿›åˆ¶å†™Inode
 bool wrtInodeInb(int inodeid, char s[inodesz]) {
 	fstream iofile("#C.disk", ios::in | ios::out | ios::binary);
-	//³¬¼¶¿é+¿éºÅ+i½ÚµãºÅ
+	//è¶…çº§å—+å—å·+ièŠ‚ç‚¹å·
 	int poi = blockSz + inodeid *inodesz;
 	iofile.seekg(ios::beg + poi);
 	iofile.write(s, inodesz);
@@ -49,22 +49,22 @@ bool wrtInodeInb(int inodeid, char s[inodesz]) {
 	return 1;
 }
 
-//Ğ´ÎÄ¼ş¿é
+//å†™æ–‡ä»¶å—
 bool wrtBlock(int blockid, char s[blockSz]) {
 	fstream iofile("#C.disk", ios::in | ios::out | ios::binary);
-	//ÖØ¶¨ÏòÖÁ¸Ã¿éµÄÆğÊ¼Î»ÖÃ
+	//é‡å®šå‘è‡³è¯¥å—çš„èµ·å§‹ä½ç½®
 	iofile.seekg(ios::beg + blockid * blockSz);
-	//Ğ´
+	//å†™
 	iofile.write(s, blockSz);
 	iofile.close();
 	return 1;
 }
 
-//¶ÁInode½Úµã
+//è¯»InodeèŠ‚ç‚¹
 Inode rdInode(int inodeid) {
 	Inode res;
 	fstream iofile("#C.disk", ios::in | ios::out | ios::binary);
-	//³¬¼¶¿é+¿éºÅ+i½ÚµãºÅ
+	//è¶…çº§å—+å—å·+ièŠ‚ç‚¹å·
 	int poi = blockSz + inodeid *inodesz;
 	iofile.seekg(ios::beg + poi);
 	iofile.read((char*)&res, sizeof(Inode));
@@ -72,52 +72,52 @@ Inode rdInode(int inodeid) {
 	return res;
 }
 
-//¶ş½øÖÆ¶ÁInode
+//äºŒè¿›åˆ¶è¯»Inode
 void rdInodeInb(int inodeid, char s[inodesz]) {
 	fstream iofile("#C.disk", ios::in | ios::out | ios::binary);
-	//ÖØ¶¨ÏòÖÁ¸Ã¿éµÄÆğÊ¼Î»ÖÃ
+	//é‡å®šå‘è‡³è¯¥å—çš„èµ·å§‹ä½ç½®
 	int poi = blockSz + inodeid *inodesz;
 	iofile.seekg(ios::beg + poi);
-	//¶Á
+	//è¯»
 	iofile.read(s, inodesz);
 	iofile.close();
 	return;
 }
 
-//Ğ´Ä¿Â¼µ½ÎÄ¼ş¿é
+//å†™ç›®å½•åˆ°æ–‡ä»¶å—
 bool wrtBlock(int blockid, Menu menu) {
 	fstream iofile("#C.disk", ios::in | ios::out | ios::binary);
-	//ÖØ¶¨ÏòÖÁ¸Ã¿éµÄÆğÊ¼Î»ÖÃ
+	//é‡å®šå‘è‡³è¯¥å—çš„èµ·å§‹ä½ç½®
 	iofile.seekg(ios::beg + blockid * blockSz);
-	//Ğ´
+	//å†™
 	iofile.write((char*)&menu, sizeof(Menu));
 	iofile.close();
 	return 1;
 }
 
-//¶ÁÎÄ¼ş¿é
+//è¯»æ–‡ä»¶å—
 void rdBlock(int blockid, char s[blockSz]) {
 	fstream iofile("#C.disk", ios::in | ios::out | ios::binary);
-	//ÖØ¶¨ÏòÖÁ¸Ã¿éµÄÆğÊ¼Î»ÖÃ
+	//é‡å®šå‘è‡³è¯¥å—çš„èµ·å§‹ä½ç½®
 	iofile.seekg(ios::beg + blockid * blockSz);
-	//¶Á
+	//è¯»
 	iofile.read(s, blockSz);
 	iofile.close();
 	return ;
 }
 
-//¶ÁÎÄ¼ş¿éµÄÄ¿Â¼
+//è¯»æ–‡ä»¶å—çš„ç›®å½•
 Menu rdBlockMenu(int blockid) {
 	Menu menu;
 	fstream iofile("#C.disk", ios::in | ios::out | ios::binary);
-	//ÖØ¶¨ÏòÖÁ¸Ã¿éµÄÆğÊ¼Î»ÖÃ
+	//é‡å®šå‘è‡³è¯¥å—çš„èµ·å§‹ä½ç½®
 	iofile.seekg(ios::beg + blockid * blockSz);
-	//¶Á
+	//è¯»
 	iofile.read((char*)&menu, sizeof(Menu));
 	iofile.close();
 	return menu;
 }
 
 
-//×¢Òâ£¡×Ö·û´®Êä³ö×îºóÒªÓĞ/0 µ«×÷ÎªÎÄ¼ş¿é²»ĞèÒª/0£»
+//æ³¨æ„ï¼å­—ç¬¦ä¸²è¾“å‡ºæœ€åè¦æœ‰/0 ä½†ä½œä¸ºæ–‡ä»¶å—ä¸éœ€è¦/0ï¼›
 #endif

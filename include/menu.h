@@ -6,8 +6,8 @@
 using namespace std;
 
 struct Item {
-	char name[stdls];//ÎÄ¼şÃû
-	int addr; //ÎÄ¼şi½ÚµãµØÖ·
+	char name[stdls];//æ–‡ä»¶å
+	int addr; //æ–‡ä»¶ièŠ‚ç‚¹åœ°å€
 	Item(){
 		memset(name, 0, sizeof(name));
 		addr = 0;
@@ -28,15 +28,15 @@ struct Menu {
 	Menu(int inodeId, int pa) {
 		it = 2;
 		memset(item, 0, sizeof(item));
-		//0ºÅÔªËØÊÇ°Ö°Ö
+		//0å·å…ƒç´ æ˜¯çˆ¸çˆ¸
 		item[0].name[0] = '.';
 		item[0].name[1] = '.';
 		item[0].addr = pa;
-		//1ºÅÔªËØÊÇ×Ô¼º
+		//1å·å…ƒç´ æ˜¯è‡ªå·±
 		item[1].name[0] = '.';
 		item[1].addr = inodeId;
 	}
-	//ÏòÄ¿Â¼ÖĞÌí¼ÓÔªËØ
+	//å‘ç›®å½•ä¸­æ·»åŠ å…ƒç´ 
 	bool add(char name[stdls], int addr) {
 		for (int i = 0; i < it; i++) {
 			if (strcmp(item[i].name, name) == 0) return 0;
@@ -46,7 +46,7 @@ struct Menu {
 		it++;
 		return 1;
 	}
-	//´ÓÄ¿Â¼É¾³ı,·µ»Øaddr
+	//ä»ç›®å½•åˆ é™¤,è¿”å›addr
 	int remove(char name[stdls]) {
 		int res = -1;
 		for (int i = 0; i < it; i++) {

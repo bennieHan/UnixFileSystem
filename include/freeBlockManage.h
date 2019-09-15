@@ -1,6 +1,6 @@
 /*
-	ЁивИа╢╫с╥╗ ╧эюМ©уопел©И
-	сисзел©И╢Сп║оЮ╣╠сз©уопел©И╣ьж╥╧Щ╢Сё╛╪ы╤╗р╩╦Жел©Иж╩дэ╢Ф╥е32╦Ж©уоп╣ьж╥
+	Ф┬░Г╩└И⌠╬Ф▌╔ФЁ∙ Г╝║Г░├Г╘╨И≈╡Г⌡≤Е²≈
+	Г■╠Д╨▌Г⌡≤Е²≈Е╓╖Е╟▐Г⌡╦Е╫⌠Д╨▌Г╘╨И≈╡Г⌡≤Е²≈Е°╟Е²─Х©┤Е╓╖О╪▄Е│┤Е╝ Д╦─Д╦╙Г⌡≤Е²≈Е▐╙Х┐╫Е╜≤Ф■╬32Д╦╙Г╘╨И≈╡Е°╟Е²─
 */
 
 #ifndef FREEBLOCKMANAGE
@@ -11,19 +11,19 @@
 #include<iostream>
 using namespace std;
 
-//мЙх╚ЁУй╪╩╞ё╛оЮ╣╠сзо╣мЁжьв╟,╥╣╩ьйвж╦уК
+//Е╝▄Е┘╗Е┬²Е╖▀Е▄√О╪▄Г⌡╦Е╫⌠Д╨▌ГЁ╩Г╩÷И┤█Хё┘,Х©■Е⌡·И╕√Ф▄┤И▓┬
 int totBlockInit() {
 	int nexFreeBlock = 1+(inodeNum/(blockSz/inodesz));
-	//ц©32©Ир╩вИё╛╫╚©уопел©И╣дпео╒╢Ф╥е╣╫ц©вИ╣зр╩©Ижпё╗31ё╘╦Жё╛вН╨Ср╩╦Жйг
-	//а╢╠Мобр╩©И╣ьж╥
+	//Ф╞▐32Е²≈Д╦─Г╩└О╪▄Е╟├Г╘╨И≈╡Г⌡≤Е²≈Г └Д©║Ф│╞Е╜≤Ф■╬Е┬╟Ф╞▐Г╩└Г╛╛Д╦─Е²≈Д╦╜О╪┬31О╪┴Д╦╙О╪▄Ф°─Е░▌Д╦─Д╦╙Ф≤╞
+	//И⌠╬Х║╗Д╦▀Д╦─Е²≈Е°╟Е²─
 	for (int i = nexFreeBlock; i < totBlock; i += blockStaSize) {
-		//char╥е╡╩об144ё╛сцshort║ёв╒рБ╢Сп║в╙╩╩
+		//charФ■╬Д╦█Д╦▀144О╪▄Г■╗shortЦ─┌ФЁ╗Ф└▐Е╓╖Е╟▐Х╫╛Ф█╒
 		short str[blockSz/2] = { 0 };
 		int ls = 0;
 		for (int j = i + 1; j < i + blockStaSize; j++) {
 			str[ls++] = j;
 		}
-		//-1╠Мй╬а╢╠М╫АйЬ
+		//-1Х║╗Г╓╨И⌠╬Х║╗Г╩⌠Ф²÷
 		if (i + blockStaSize == totBlock) 
 			str[ls++] = -1;
 		else str[ls++] = i + blockStaSize;
@@ -32,15 +32,15 @@ int totBlockInit() {
 	return nexFreeBlock;
 }
 
-//╢Р©╙р╩╦Жпб╢Ф╥е©уопел©И╣дел©И
+//Ф┴⌠Е╪─Д╦─Д╦╙Ф√╟Е╜≤Ф■╬Г╘╨И≈╡Г⌡≤Е²≈Г └Г⌡≤Е²≈
 bool openBlockPack() {
 	if (sprblk.freeBlockStr == -1) {
-		//ц╩сппб╣д©уопел©И╟Эё╛╢Р©╙й╖╟э
+		//Ф╡║Ф°┴Ф√╟Г └Г╘╨И≈╡Г⌡≤Е²≈Е▄┘О╪▄Ф┴⌠Е╪─Е╓╠Х╢╔
 		return 0;
 	}
 	short str[blockSz/2] = { 0 };
 	rdBlock(sprblk.freeBlockStr, (char*)str);
-	//т╜╢Ф╥еел©Ир╡╠ДЁиак©уел©Л
+	//Е▌÷Е╜≤Ф■╬Г⌡≤Е²≈Д╧÷Е▐≤Ф┬░Д╨├Г╘╨Г⌡≤Е©╚
 	sprblk.freeBlockSta.push(sprblk.freeBlockStr);
 	sprblk.freeBlockStr = str[blockStaSize-1];
 	for (int i = 0; i < blockStaSize-1; i++) {
@@ -49,30 +49,30 @@ bool openBlockPack() {
 	return 1;
 }
 
-//╥Бв╟р╩╦Жв╟©уопел╣д©Иел©И
-//╫╡╣ююМ р╩╦Жел©Ив╟31╦Ж╣ьж╥ й╣╪йиоу╩жпсп32╦Ж╣ьж╥ак╡е╩А©╙й╪╥Бв╟ ╫╚╨С31╦Ж╣д╣ьж╥╥е╣╫
+//Е╟│Хё┘Д╦─Д╦╙Хё┘Г╘╨И≈╡Г⌡≤Г └Е²≈Г⌡≤Е²≈
+//Х╝╡И│⌠Г░├ Д╦─Д╦╙Г⌡≤Е²≈Хё┘31Д╦╙Е°╟Е²─ Е╝·И≥┘Д╦┼Ф═┬Д╦╜Ф°┴32Д╦╙Е°╟Е²─Д╨├Ф┴█Д╪ Е╪─Е╖▀Е╟│Хё┘ Е╟├Е░▌31Д╦╙Г └Е°╟Е²─Ф■╬Е┬╟
 bool closeBlockPack() {
 	short str[blockSz / 2] = { 0 };
-	//у╩╤╔т╙кьсцю╢╢Ф╥ефДкШ©уопел©И╣ьж╥
+	//Ф═┬И║╤Е┘┐Г╢═Г■╗Ф²╔Е╜≤Ф■╬Е┘╤Д╩√Г╘╨И≈╡Г⌡≤Е²≈Е°╟Е²─
 	int nextBlock = sprblk.freeBlockSta.top();
 	sprblk.freeBlockSta.pop();
-	//©уопел©И╥е╫Ьх╔
+	//Г╘╨И≈╡Г⌡≤Е²≈Ф■╬Х©⌡Е▌╩
 	for (int i = 0; i < blockStaSize-1; i++) {
 		str[i] = sprblk.freeBlockSta.top();
 		sprblk.freeBlockSta.pop();
 	}
-	//а╢╠М ╡Е╣╫м╥ио
+	//И⌠╬Х║╗ Ф▐▓Е┬╟Е╓╢Д╦┼
 	str[blockStaSize-1] = sprblk.freeBlockStr;
 	sprblk.freeBlockStr = nextBlock;
 	wrtBlock(nextBlock, (char*)str);
 	return 1;
 }
 
-//╣ц╣╫р╩╦Ж©уоп©И ╥╣╩ь©уоп©И╣д╠Ю╨е
+//Е╬≈Е┬╟Д╦─Д╦╙Г╘╨И≈╡Е²≈ Х©■Е⌡·Г╘╨И≈╡Е²≈Г └Г╪√Е▐╥
 int getBlock() {
 	if (sprblk.freeBlockSta.empty()) {
 		int fg = openBlockPack();
-		//у╩©у р╡ц╩сп╟Э й╖╟э
+		//Ф═┬Г╘╨ Д╧÷Ф╡║Ф°┴Е▄┘ Е╓╠Х╢╔
 		if (!fg) return -1;
 	}
 	sprblk.freeBlockNum--;
@@ -81,7 +81,7 @@ int getBlock() {
 	return res;
 }
 
-//йм╥ер╩╦Ж©уоп©И
+//И┤┼Ф■╬Д╦─Д╦╙Г╘╨И≈╡Е²≈
 bool freeBlock(int blockId) {
 	sprblk.freeBlockNum++;
 	sprblk.freeBlockSta.push(blockId);

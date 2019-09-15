@@ -1,23 +1,23 @@
 #ifndef STDNUM
 #define STDNUM
 
-//×ÜÊıÄ¿640+£¨60/4£©+1 = 656£»
+//æ€»æ•°ç›®640+ï¼ˆ60/4ï¼‰+1 = 656ï¼›
 const int totBlock = 656;
-const int inodeNum = 60; //i½Úµã×ÜÊı
-const int blockNum = 640; //´æÎÄ¼şµÄÅÌ¿éÊıÄ¿
+const int inodeNum = 60; //ièŠ‚ç‚¹æ€»æ•°
+const int blockNum = 640; //å­˜æ–‡ä»¶çš„ç›˜å—æ•°ç›®
 
-//Õ»µÄ´óĞ¡
+//æ ˆçš„å¤§å°
 const int blockStaSize = 32;
 const int inodeStaSize = 20;
-//Ã¿¿é´óĞ¡£¨×Ö½Ú£©
+//æ¯å—å¤§å°ï¼ˆå­—èŠ‚ï¼‰
 const int blockSz = 512;
-//Ã¿¸öinodeµÄÕ¼Î» (inodeÊµ¼Ê´óĞ¡Îª72 Ìí¼ÓÁË¸ü¶àÃèÊöÊ±¼äµÄ±äÁ¿ °üº¬Ò»Ğ©ÈßÓà)
+//æ¯ä¸ªinodeçš„å ä½ (inodeå®é™…å¤§å°ä¸º72 æ·»åŠ äº†æ›´å¤šæè¿°æ—¶é—´çš„å˜é‡ åŒ…å«ä¸€äº›å†—ä½™)
 const int inodesz = 128;
-//Ã¿¿éÓĞ¼¸¸öInode
+//æ¯å—æœ‰å‡ ä¸ªInode
 const int B_I = 4;
-//Ã¿¼¶Ë÷Òı´óĞ¡ <512/4 = 128
+//æ¯çº§ç´¢å¼•å¤§å° <512/4 = 128
 const int indexsz = 16;
-//×Ö·û´®³¤¶ÈÏŞÖÆ Êµ¼ÊÉÏÊÇ11ÒòÎª\0
+//å­—ç¬¦ä¸²é•¿åº¦é™åˆ¶ å®é™…ä¸Šæ˜¯11å› ä¸º\0
 const int stdls = 12;
 
 #endif

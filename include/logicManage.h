@@ -6,7 +6,7 @@
 #include"docTree.h"
 #include"diskRW.h"
 
-//ÖØ×°ÏµÍ³
+//é‡è£…ç³»ç»Ÿ
 void fresh() {
 	sprblk.freeBlockStr = totBlockInit();
 	sprblk.freeInodeStr = totInodeInit();
@@ -14,14 +14,14 @@ void fresh() {
 
 }
 
-//ÖØĞÂÆô¶¯
-//¿ª»ú³õÊ¼»¯
+//é‡æ–°å¯åŠ¨
+//å¼€æœºåˆå§‹åŒ–
 bool getInit() {
 	sprblk = rdSpblk();
 	return 1;
 }
 
-//¹Ø±ÕÇ°±£´æÖØÒªÊı¾İ
+//å…³é—­å‰ä¿å­˜é‡è¦æ•°æ®
 bool getDestroy() {
 	wrtSpblk(sprblk);
 	return 1;

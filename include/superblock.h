@@ -8,39 +8,39 @@
 using namespace std;
 
 struct Sprblk {
-	//ÅÌ¿é×ÜÊı
+	//ç›˜å—æ€»æ•°
 	int blockTot;
-	//¿ÕÏĞi½ÚµãÊıÄ¿+Õ»+
+	//ç©ºé—²ièŠ‚ç‚¹æ•°ç›®+æ ˆ+
 	int freeInodeNum;
 	Stack freeInodeSta;
-	//³É×éÁ´½ÓÊ×¿éµÄµØÖ·
+	//æˆç»„é“¾æ¥é¦–å—çš„åœ°å€
 	int freeInodeStr;
-	//¿ÕÏĞÅÌ¿éÊıÄ¿+Õ»
+	//ç©ºé—²ç›˜å—æ•°ç›®+æ ˆ
 	int freeBlockNum;
 	Stack freeBlockSta;
-	//³É×éÁ´½ÓÊ×¿éµÄµØÖ·
+	//æˆç»„é“¾æ¥é¦–å—çš„åœ°å€
 	int freeBlockStr;
-	//¸ùÄ¿Â¼µÄInode±àºÅ
+	//æ ¹ç›®å½•çš„Inodeç¼–å·
 	int root;
-	//ĞŞ¸Ä
+	//ä¿®æ”¹
 	bool changeFlag;
 	time_t changeTime;
 	bool umask[3][3];
-	//ÓÃ»§Ïà¹Ø
+	//ç”¨æˆ·ç›¸å…³
 	char username[5][stdls];
 	char password[5][stdls];
 	char group[5][stdls];
 
 	Sprblk() {
-		//ÓÃ»§ÇåÁã
+		//ç”¨æˆ·æ¸…é›¶
 		memset(username, 0, sizeof(username));
 		memset(password, 0, sizeof(password));
 		memset(group, 0, sizeof(group));
-		//³õÊ¼»¯ÅÌ¿éÊıÄ¿ 640+15+1
+		//åˆå§‹åŒ–ç›˜å—æ•°ç›® 640+15+1
 		blockTot = totBlock;
 		freeInodeNum = inodeNum;
 		freeBlockNum = blockNum;
-		//³õÊ¼»¯Õ»´óĞ¡
+		//åˆå§‹åŒ–æ ˆå¤§å°
 		freeInodeSta.sz = inodeStaSize;
 		freeBlockSta.sz = blockStaSize;
 		changeFlag = 0;

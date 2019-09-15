@@ -6,10 +6,10 @@
 #include"superblock.h"
 using namespace std;
 
-//ÓÃ»§ ÓÃÓÚ¼ÇÂ¼µ±Ç°ÓÃ»§
+//ç”¨æˆ· ç”¨äºè®°å½•å½“å‰ç”¨æˆ·
 struct CurUser {
-	string username; //µ±Ç°ÓÃ»§ÓÃ»§Ãû
-	string group; //µ±Ç°ÓÃ»§ËùÊô×é
+	string username; //å½“å‰ç”¨æˆ·ç”¨æˆ·å
+	string group; //å½“å‰ç”¨æˆ·æ‰€å±ç»„
 	CurUser(){}
 	CurUser(string _username, string _group) {
 		username = _username;
@@ -17,19 +17,19 @@ struct CurUser {
 	}
 }curUser;
 
-//ÕıºÃ64B
+//æ­£å¥½64B
 struct Inode {
-	bool type; //0ÎÄ¼ş 1Ä¿Â¼
-	bool visMod[3][3]; //·ÃÎÊÄ£Ê½ ·Ö±ğÎª ÓµÓĞÕß Í¬×é ÆäËûÓÃ»§µÄ¶ÁĞ´Ö´ĞĞ
+	bool type; //0æ–‡ä»¶ 1ç›®å½•
+	bool visMod[3][3]; //è®¿é—®æ¨¡å¼ åˆ†åˆ«ä¸º æ‹¥æœ‰è€… åŒç»„ å…¶ä»–ç”¨æˆ·çš„è¯»å†™æ‰§è¡Œ
 	time_t lastRead;
 	time_t lastWrite;
-	int docSize; //ÎÄ¼ş´óĞ¡ µ¥Î»£º×Ö½Ú
-	short dirStr[4]; //Ö±½Ó¿éºÅ
-	short lv1; //Ò»¼¶¼ä½ÓµØÖ·
-	short lv2; //Ò»¼¶¼ä½ÓµØÖ·
-	short linkedMenu; //ÎÄ±¾ÎÄ¼ş¿ÉÒÔÁ¬½ÓÊ¹ÓÃ
-	char onwer[stdls]; //ÓµÓĞÕß
-	char group[stdls]; //ËùÊô×é
+	int docSize; //æ–‡ä»¶å¤§å° å•ä½ï¼šå­—èŠ‚
+	short dirStr[4]; //ç›´æ¥å—å·
+	short lv1; //ä¸€çº§é—´æ¥åœ°å€
+	short lv2; //ä¸€çº§é—´æ¥åœ°å€
+	short linkedMenu; //æ–‡æœ¬æ–‡ä»¶å¯ä»¥è¿æ¥ä½¿ç”¨
+	char onwer[stdls]; //æ‹¥æœ‰è€…
+	char group[stdls]; //æ‰€å±ç»„
 	Inode(bool type = 0, int docSize = 0, CurUser curUser = CurUser("", ""))
 		:type(type),docSize(docSize){
 		for (int i = 0; i < 4; i++) dirStr[i] = -1;
